@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Portfólio Criativo</title>
+    
+    <link rel="icon" href="logo.png" type="image/png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Reset básico e tipografia */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Bloqueia o scroll e força o site a caber em 100% da tela */
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* ================= VÍDEO DE FUNDO ================= */
+        .video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.55); 
+            z-index: -1;
+        }
+
+        /* Layout em Tela Única (Sem Scroll) */
+        body {
+            color: #fff; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* ================= MENU SUPERIOR ================= */
+        header {
+            width: 100%;
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            max-height: 45px; 
+            width: auto;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5)); 
+        }
+
+        /* Redes Sociais */
+        .social-links, .footer-social {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .social-btn {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.1rem;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .social-btn i {
+            transition: color 0.3s ease;
+            z-index: 2;
+        }
+
+        .social-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .ring-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+            pointer-events: none;
+        }
+
+        .ring-circle {
+            fill: none;
+            stroke-width: 2.5;
+            stroke-dasharray: 138;
+            stroke-dashoffset: 138;
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        .social-btn.instagram:hover i { color: #E1306C; }
+        .social-btn.instagram:hover .ring-circle { stroke: #E1306C; stroke-dashoffset: 0; }
+
+        .social-btn.twitter:hover i { color: #1DA1F2; }
+        .social-btn.twitter:hover .ring-circle { stroke: #1DA1F2; stroke-dashoffset: 0; }
+
+        .social-btn.whatsapp:hover i { color: #25D366; }
+        .social-btn.whatsapp:hover .ring-circle { stroke: #25D366; stroke-dashoffset: 0; }
+
+        /* ================= ÁREA PRINCIPAL (CAPA) ================= */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p.hero-subtitle {
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            margin-bottom: 2rem;
+            color: #e0e0e0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* ================= CARTÕES 3D RESPONSIVOS ================= */
+        .projects-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: transparent;
+            width: 270px;
+            height: 310px;
+            perspective: 1000px; 
+            text-decoration: none;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d; 
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; 
+            backface-visibility: hidden;
+            border-radius: 16px;
+            
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); 
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            color: #b1b95d;
+        }
+
+        .card-front {
+            z-index: 2;
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+        }
+
+        .card-icon img {
+            width: 3vw;
+        }
+
+        .card-front h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card-back {
+            transform: rotateY(180deg); 
+            background: rgba(255, 255, 255, 0.15); 
+        }
+
+        .card-back h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #b1b95d;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .card-back p {
+            font-size: 0.9rem;
+            color: #f0f0f0;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .popup-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #e74c3c; 
+            color: #fff;
+            border-radius: 30px; 
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .card.crafts .popup-btn {
+            background-color: #27ae60; 
+        }
+
+        .card:hover .popup-btn {
+            transform: scale(1.05); 
+        }
+        
+        /* ================= RODAPÉ COMPACTO ================= */
+        footer {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.4); 
+            padding: 1rem 2rem;
+            text-align: center;
+            backdrop-filter: blur(8px); 
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .footer-email { font-size: 0.95rem; color: #ddd; }
+        .footer-email a {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-email a:hover { color: #e74c3c; }
+
+        .footer-copy { font-size: 0.8rem; color: #bbb; }
+
+        /* Ajustes Dinâmicos para Telemóveis Pequenos */
+        @media (max-width: 600px) {
+            header { padding: 0.8rem 1.2rem; }
+            .logo img { max-height: 35px; } 
+            .hero h1 { font-size: 1.8rem; }
+            .hero p.hero-subtitle { font-size: 0.85rem; margin-bottom: 1rem; }
+            .projects-container { gap: 1rem; }
+            .card { width: 140px; height: 210px; }
+            .card-icon { font-size: 2.2rem; margin-bottom: 0.4rem; }
+            .card-front h2 { font-size: 1rem; }
+            .card-back { padding: 0.8rem; }
+            .card-back h4 { font-size: 0.9rem; margin-bottom: 0.4rem; }
+            .card-back p { font-size: 0.75rem; margin-bottom: 0.8rem; line-height: 1.2; }
+            .popup-btn { padding: 5px 10px; font-size: 0.65rem; }
+            footer { padding: 0.6rem 1rem; }
+            .footer-social { display: none; } /* Oculta redes sociais repetidas do rodapé em telas muito pequenas para poupar espaço */
+        }
+    </style>
+</head>
+<body>
+
+    <video class="video-background" autoplay loop muted playsinline>
+        <source src="Criar_um_video_curto_colcar_ao.mp4" type="video/mp4">
+        O seu navegador não suporta vídeos.
+    </video>
+    <div class="video-overlay"></div>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logotipo Thiago Alexandre Rovere">
+        </div>
+
+        <div class="social-links">
+            <a href="SEU_LINK_DO_INSTAGRAM_AQUI" class="social-btn instagram" target="_blank" title="Instagram">
+                <i class="fab fa-instagram"></i>
+                <svg class="ring-svg" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" class="ring-circle"/></svg>
+            </a>
+            <a href="SEU_LINK_DO_TWITTER_AQUI" class="social-btn twitter" target="_blank" title="Twitter">
+                <i class="fab fa-twitter"></i>
+                <svg class="ring-svg" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" class="ring-circle"/></svg>
+            </a>
+            <a href="SEU_LINK_DO_WHATSAPP_AQUI" class="social-btn whatsapp" target="_blank" title="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+                <svg class="ring-svg" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" class="ring-circle"/></svg>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Selecione as opções abaixo!</h1>
+            <p class="hero-subtitle">Para explorar meus trabalhos e projetos detalhados.</p>
+
+            <div class="projects-container">
+                
+                <a href="URL_DO_SEU_SITE_DE_FOTOGRAFIA_AQUI" class="card photo" target="_blank">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-icon"><img src="fotografia.png" alt=""></div>
+                            <h2>Fotografia</h2>
+                        </div>
+                        <div class="card-back">
+                            <h4>Explore Fotografia</h4>
+                            <p>Um portfólio completo de ensaios, paisagens incríveis e artes visuais capturadas através das minhas lentes.</p>
+                            <span class="popup-btn">VISITAR SITE</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="URL_DO_SEU_SITE_DE_ARTESANATO_AQUI" class="card crafts" target="_blank">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-icon"><img src="feito-a-mao.png" alt=""></div>
+                            <h2>Artesanato</h2>
+                        </div>
+                        <div class="card-back">
+                            <h4>Descubra Artesanato</h4>
+                            <p>Conheça minhas coleções exclusivas. Peças feitas totalmente à mão, com muito carinho, dedicação e detalhes únicos.</p>
+                            <span class="popup-btn">CONHECER AGORA</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            
+            <div class="footer-social">
+                <a href="SEU_LINK_DO_INSTAGRAM_AQUI" class="social-btn instagram" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                    <svg class="ring-svg" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" class="ring-circle"/></svg>
+                </a>
+                <a href="SEU_LINK_DO_TWITTER_AQUI" class="social-btn twitter" target="_blank" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                    <svg class="ring-svg" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" class="ring-circle"/></svg>
+                </a>
+                <a href="SEU_LINK_DO_WHATSAPP_AQUI" class="social-btn whatsapp" target="_blank" title="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                    <svg class="ring-svg" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" class="ring-circle"/></svg>
+                </a>
+            </div>
+            
+            <div class="footer-email">
+                E-mail: <a href="mailto:seuemail@exemplo.com">seuemail@exemplo.com</a>
+            </div>
+
+            <div class="footer-copy">
+                &copy; 2026 Alexandre Benjamin. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
